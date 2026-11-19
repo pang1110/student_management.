@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Q
 from .models import Student
 from .forms import StudentForm
@@ -131,4 +132,17 @@ def student_delete(request, pk):
         request,
         'registration/student_confirm_delete.html',
         {'student': student}
+    )
+
+
+# MODULE 08 - Staff-Only Dashboard
+def staff_check(user):
+    return user.is_authenticated and user.is_staff
+
+
+@user_passes_test(staff_check, login_url='login')
+def staff_dashboard(request):
+    return render(
+        request,
+        'registration/dashboard.html'
     )
