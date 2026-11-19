@@ -1,12 +1,10 @@
 from django.db import models
 
-# Create your models here.
-from django.db import models
-
 GENDER_CHOICES = [
     ("Male", "Male"),
     ("Female", "Female"),
 ]
+
 
 class Student(models.Model):
     student_id = models.CharField(max_length=20, unique=True)

@@ -1,49 +1,114 @@
-body {
-    font-family: Arial, sans-serif;
-    background: #f4f6f9;
-    color: #263445;
-    margin: 30px;
+/* MODULE 09 - Dashboard Enhancement */
+
+/* Dashboard Container */
+.dashboard-container {
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-h1 {
+/* Dashboard Sections */
+.summary-section,
+.gender-section,
+.report-section {
+    background: #ffffff;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 8px;
+}
+
+/* Summary Cards */
+.summary-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.summary-card {
+    background: #e8f0fa;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.summary-card h3 {
     color: #0b2d5c;
 }
 
-a {
+.summary-card p {
+    font-size: 28px;
+    font-weight: bold;
     color: #1f5d91;
-    text-decoration: none;
+    margin: 10px 0;
 }
 
-a:hover {
-    text-decoration: underline;
+/* Gender Overview */
+.gender-item {
+    margin: 15px 0;
 }
 
-table {
+.gender-bar {
     width: 100%;
-    border-collapse: collapse;
-    background: #ffffff;
+    height: 22px;
+    background: #e1e7ef;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
-th {
-    background: #0b2d5c;
-    color: #ffffff;
-    text-align: left;
+.male-bar {
+    height: 100%;
+    width: var(--bar-width, 0%);
+    background: #1f5d91;
 }
 
-th, td {
+.female-bar {
+    height: 100%;
+    width: var(--bar-width, 0%);
+    background: #d66b9b;
+}
+
+/* Search Form */
+.search-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.search-form input {
+    flex: 1;
     padding: 10px;
     border: 1px solid #d7dee8;
+    border-radius: 4px;
 }
 
-button {
-    background: #1f5d91;
-    color: #ffffff;
-    border: 0;
-    padding: 9px 14px;
-    cursor: pointer;
+/* Student Report */
+.report-section table {
+    margin-top: 15px;
 }
 
-input, select {
-    padding: 8px;
-    margin: 4px 0;
+.report-section th,
+.report-section td {
+    padding: 12px;
+}
+
+/* Responsive Layout */
+@media (max-width: 700px) {
+    body {
+        margin: 15px;
+    }
+
+    .summary-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .search-form {
+        flex-direction: column;
+    }
+
+    .report-section {
+        overflow-x: auto;
+    }
+
+    .report-section table {
+        min-width: 650px;
+    }
 }

@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Q
+from django.db.models.functions import Lower
 from .models import Student
 from .forms import StudentForm
 
@@ -29,6 +30,7 @@ def registration_success(request):
 # MODULE 07 - Student Directory
 def student_list(request):
     query = request.GET.get('q', '').strip()
+
     students = Student.objects.all().order_by(
         'last_name', 'first_name'
     )
@@ -135,14 +137,67 @@ def student_delete(request, pk):
     )
 
 
-# MODULE 08 - Staff-Only Dashboard
+# MODULE 08 - Staff Access Protection
 def staff_check(user):
     return user.is_authenticated and user.is_staff
 
 
+# MODULE 09 - Dashboard Enhancement and Basic Reporting
 @user_passes_test(staff_check, login_url='login')
 def staff_dashboard(request):
+
+    # Student Summary
+    total_students = Student.objects.count()
+
+    male_students = Student.objects.filter(
+        gender='Male'
+    ).count()
+
+    female_students = Student.objects.filter(
+        gender='Female'
+    ).count()
+
+    # Gender Percentages
+    male_percent = (
+        male_students / total_students * 100
+        if total_students > 0 else 0
+    )
+
+    female_percent = (
+        female_students / total_students * 100
+        if total_students > 0 else 0
+    )
+
+    # Read Search Term
+    query = request.GET.get('q', '').strip()
+
+    # Prepare Student Report
+    students = Student.objects.all().order_by(
+        Lower('last_name'),
+        Lower('first_name')
+    )
+
+    # Search Multiple Fields
+    if query:
+        students = students.filter(
+            Q(student_id__icontains=query) |
+            Q(first_name__icontains=query) |
+            Q(last_name__icontains=query)
+        )
+
+    # Context Dictionary
+    context = {
+        'total_students': total_students,
+        'male_students': male_students,
+        'female_students': female_students,
+        'male_percent': male_percent,
+        'female_percent': female_percent,
+        'students': students,
+        'query': query,
+    }
+
     return render(
         request,
-        'registration/dashboard.html'
+        'registration/dashboard.html',
+        context
     )
